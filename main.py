@@ -3,9 +3,11 @@ from presentation_layer.minimini_test import Option
 sys.path.append("../business_logic_layer")
 sys.path.append("../persistence_layer")
 
+MINISHELL_PROMPT = "minishell >> "
+
 
 def main():
-    option = Option()
+    option = Option(MINISHELL_PROMPT)
     option.test_loop()
 
 

@@ -1,6 +1,7 @@
 # minimini_test
 ## このテストの使い方
 ### minishell実行ファイルをディレクトリへ入れる。
+### minishell内のプロンプトをコピーし、main.pyファイル内のminishell_prompt定数に設定。
 ### python3 main.pyを実行する。
 ## テスト方法
 ### 任意の実行したいコマンドを記述したファイルを作成。

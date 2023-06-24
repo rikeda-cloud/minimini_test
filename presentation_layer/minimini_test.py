@@ -8,8 +8,8 @@ PROMPT = ' コマンドを選択してください: '
 
 
 class Option:
-    def __init__(self):
-        self.command = Command()
+    def __init__(self, minishell_prompt):
+        self.command = Command(minishell_prompt)
         self.print_result = PrintResult()
         self.command_dict = {
             'search': {

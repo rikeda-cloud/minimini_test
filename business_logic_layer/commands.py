@@ -59,12 +59,16 @@ def choice_label_and_status():
 
 
 class Command:
-    def __init__(self):
+    def __init__(self, minishell_prompt):
         self.log = Log()
+        self.minishell_prompt = minishell_prompt
 
     def __exec_command_bash_minishell(self, command_line: str):
         bash_proc = exec_command_line(command_line, BASH_PATH)
         minishell_proc = exec_command_line(command_line, MINISHELL_PATH)
+        minishell_proc.stdout = minishell_proc.stdout.strip(self.minishell_prompt)
+        minishell_proc.stdout = minishell_proc.stdout.lstrip(command_line)
+        minishell_proc.stdout = minishell_proc.stdout.lstrip('\n')
         result = json_sirialize(command_line, bash_proc, minishell_proc)
         self.log.add(result)
         return result
