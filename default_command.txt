@@ -1,2 +1,4 @@
 ls
 pwd
+echo "abc"def 'ghi'
+echo $?

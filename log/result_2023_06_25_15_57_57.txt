@@ -1,0 +1,71 @@
+{
+  "start": "2023年06月25日15時57分57秒",
+  "ls": {
+    "diff_exit_status": "OK",
+    "diff_stdout": "OK",
+    "diff_stderr": "OK",
+    "exit_status": {
+      "bash": 0,
+      "minishell": 0
+    },
+    "stdout": {
+      "bash": "business_logic_layer\ndefault_command.txt\nlog\nmain.py\nminishell\npersistence_layer\npresentation_layer\nREADME.md\n",
+      "minishell": "business_logic_layer\ndefault_command.txt\nlog\nmain.py\nminishell\npersistence_layer\npresentation_layer\nREADME.md\n"
+    },
+    "stderr": {
+      "bash": "",
+      "minishell": ""
+    }
+  },
+  "pwd": {
+    "diff_exit_status": "OK",
+    "diff_stdout": "OK",
+    "diff_stderr": "OK",
+    "exit_status": {
+      "bash": 0,
+      "minishell": 0
+    },
+    "stdout": {
+      "bash": "/home/rikeda/test\n",
+      "minishell": "/home/rikeda/test\n"
+    },
+    "stderr": {
+      "bash": "",
+      "minishell": ""
+    }
+  },
+  "echo \"abc\"def 'ghi'": {
+    "diff_exit_status": "OK",
+    "diff_stdout": "KO",
+    "diff_stderr": "OK",
+    "exit_status": {
+      "bash": 0,
+      "minishell": 0
+    },
+    "stdout": {
+      "bash": "abcdef ghi\n",
+      "minishell": "\"abc\"def 'ghi'\n"
+    },
+    "stderr": {
+      "bash": "",
+      "minishell": ""
+    }
+  },
+  "echo $?": {
+    "diff_exit_status": "OK",
+    "diff_stdout": "KO",
+    "diff_stderr": "OK",
+    "exit_status": {
+      "bash": 0,
+      "minishell": 0
+    },
+    "stdout": {
+      "bash": "0\n",
+      "minishell": "$?\n"
+    },
+    "stderr": {
+      "bash": "",
+      "minishell": ""
+    }
+  }
+}

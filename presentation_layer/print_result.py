@@ -1,3 +1,4 @@
+import re
 from presentation_layer.color import Color
 
 
@@ -16,19 +17,27 @@ class PrintResult:
                 'stdout',
                 'stderr'
         ]
+        self.accept_anlysis = [
+                'total_stdout_faild',
+                'total_stderr_faild',
+                'total_exit_status_faild'
+        ]
 
     def print_data(self, command, data, accept):
         Color.print(f'~~~ {command} ~~~', Color.PURPLE)
         for key, value in data.items():
             if key in accept:
-                if value == 'KO':
+                if re.match('total', key) and value != 0:
+                    Color.print_reverce(f'{key} -> {value}', Color.RED)
+                elif value == 'KO':
                     Color.print_reverce(f'{key} -> {value}', Color.RED)
                 elif value == 'OK':
                     Color.print(f'{key} -> {value}', Color.GREEN)
                 else:
                     Color.print(f'{key} -> {value}', Color.CYAN)
 
-                    
+    def anlysis(self, after_anlysis):
+        self.print_data('anlysis', after_anlysis, self.accept_anlysis)
 
     def search(self, results):
         for result in results:

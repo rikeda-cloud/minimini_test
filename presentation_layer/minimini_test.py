@@ -12,6 +12,11 @@ class Option:
         self.command = Command(minishell_prompt)
         self.print_result = PrintResult()
         self.command_dict = {
+            'anlysis': {
+                'description': 'KO/コマンド数を表示',
+                'method': self.command.anlysis,
+                'print': self.print_result.anlysis
+            },
             'search': {
                 'description': '特定の実行結果となったコマンドを検索',
                 'method': self.command.search,

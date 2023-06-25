@@ -39,6 +39,23 @@ def json_sirialize(command_line, proc1, proc2):
     return nest_result
 
 
+def anlysis_result(results: dict[str, str]):
+    after_anlysis_result = {
+            'total_exit_status_faild': 0,
+            'total_stdout_faild': 0,
+            'total_stderr_faild': 0
+    }
+    for command, result in results.items():
+        if isinstance(result, dict):
+            if result['diff_exit_status'] == 'KO':
+                after_anlysis_result['total_exit_status_faild'] += 1
+            if result['diff_stdout'] == 'KO':
+                after_anlysis_result['total_stdout_faild'] += 1
+            if result['diff_stderr'] == 'KO':
+                after_anlysis_result['total_stderr_faild'] += 1
+    return after_anlysis_result
+
+
 def choice_label_and_status():
     labels = ['diff_exit_status', 'diff_stdout', 'diff_stderr']
     [Color.print(f'[{idx + 1}] {label}', Color.BLUE) for idx, label in enumerate(labels)]
@@ -72,6 +89,11 @@ class Command:
         result = json_sirialize(command_line, bash_proc, minishell_proc)
         self.log.add(result)
         return result
+
+    def anlysis(self):
+        results = self.log.load()
+        results = anlysis_result(results)
+        return results
 
     def search(self):
         label, status = choice_label_and_status()
