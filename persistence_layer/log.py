@@ -14,7 +14,7 @@ def get_format_now_time():
 class Log:
     def __init__(self):
         self.start_time = get_format_now_time()
-        self.log_file = LOG_DIR + 'result_' + self.start_time[0] + '.txt'
+        self.log_file = LOG_DIR + 'log_' + self.start_time[0] + '.json'
         if not os.path.isdir(LOG_DIR):
             os.mkdir(LOG_DIR)
         with open(self.log_file, 'w'):
