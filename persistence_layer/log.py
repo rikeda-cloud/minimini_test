@@ -42,7 +42,9 @@ class Log:
         search_result_list = []
         for command, data in json_load.items():
             if type(data) == dict:
-                [search_result_list.append({command: data}) for key, value in data.items() if key == label and value == status]
+                for key, value in data.items():
+                    if key == label and value == status:
+                        search_result_list.append({command: data})
         return search_result_list
 
 
@@ -50,7 +52,6 @@ def main():
     log = Log()
     log.add({"ls -la": {'bash_status': 'KO', 'minishell_status': 'KO'}})
     log.add({"echo": {'bash_status': 'OK', 'minishell_status': 'OK'}})
-    # print([print(key, value) for key, value in log.load().items()])
     print(log.search('bash_status', 'OK'))
     print(log.search('bash_status', 'KO'))
 

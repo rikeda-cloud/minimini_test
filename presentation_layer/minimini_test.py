@@ -1,4 +1,3 @@
-import json
 from business_logic_layer.commands import Command
 from presentation_layer.color import Color
 from presentation_layer.print_result import PrintResult
@@ -27,10 +26,10 @@ class Option:
                 'method': self.command.exec,
                 'print': self.print_result.exec
             },
-            'exec_all': {
+            'all': {
                 'description': 'テキストファイル内の全てのコマンドを実行',
-                'method': self.command.exec_all,
-                'print': self.print_result.exec_all
+                'method': self.command.all,
+                'print': self.print_result.all
             },
             'show': {
                 'description': '全ての実行結果を一覧',
@@ -54,10 +53,8 @@ class Option:
     def __print_commands(self):
         max_len = max([len(command) for command in self.command_dict.keys()])
         for key, value in self.command_dict.items():
-            Color.print(f" {key:<{max_len + 1}}: {value['description']}", Color.BLUE)
-
-    def print_result(self, choice, results):
-        print(json.dumps(results, indent=2, ensure_ascii=False))
+            Color.print(f" {key:<{max_len + 1}}: {value['description']}",
+                        Color.BLUE)
 
     def __choice_command(self) -> str:
         choice = ''

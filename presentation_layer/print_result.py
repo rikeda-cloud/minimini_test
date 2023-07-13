@@ -48,7 +48,7 @@ class PrintResult:
         for command, data in result.items():
             self.print_data(command, data, self.accept_exec)
 
-    def exec_all(self, results):
+    def all(self, results):
         for result in results:
             for command, data in result.items():
                 self.print_data(command, data, self.accept_exec)

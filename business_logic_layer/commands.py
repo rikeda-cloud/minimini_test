@@ -32,7 +32,8 @@ def json_sirialize(command_line, proc1, proc2):
     result_dict['diff_exit_status'] = diff(proc1.returncode, proc2.returncode)
     result_dict['diff_stdout'] = diff(proc1.stdout, proc2.stdout)
     result_dict['diff_stderr'] = diff(proc1.stderr, proc2.stderr)
-    result_dict['exit_status'] = {BASH: proc1.returncode, MINISHELL: proc2.returncode}
+    p1_retcode, p2_retcode = proc1.returncode, proc2.returncode
+    result_dict['exit_status'] = {BASH: p1_retcode, MINISHELL: p2_retcode}
     result_dict['stdout'] = {BASH: proc1.stdout, MINISHELL: proc2.stdout}
     result_dict['stderr'] = {BASH: proc1.stderr, MINISHELL: proc2.stderr}
     nest_result[command_line] = result_dict
@@ -58,7 +59,8 @@ def anlysis_result(results: dict[str, str]):
 
 def choice_label_and_status():
     labels = ['diff_exit_status', 'diff_stdout', 'diff_stderr']
-    [Color.print(f'[{idx + 1}] {label}', Color.BLUE) for idx, label in enumerate(labels)]
+    for idx, label in enumerate(labels):
+        Color.print(f'[{idx + 1}] {label}', Color.BLUE)
     select_idx = -1
     while True:
         try:
@@ -83,9 +85,11 @@ class Command:
     def __exec_command_bash_minishell(self, command_line: str):
         bash_proc = exec_command_line(command_line, BASH_PATH)
         minishell_proc = exec_command_line(command_line, MINISHELL_PATH)
-        minishell_proc.stdout = minishell_proc.stdout.strip(self.minishell_prompt)
-        minishell_proc.stdout = minishell_proc.stdout.lstrip(command_line)
-        minishell_proc.stdout = minishell_proc.stdout.lstrip('\n')
+        minishell_stdout = minishell_proc.stdout
+        minishell_stdout = minishell_stdout.strip(self.minishell_prompt)
+        minishell_stdout = minishell_stdout.lstrip(command_line)
+        minishell_stdout = minishell_stdout.lstrip('\n')
+        minishell_proc.stdout = minishell_stdout
         result = json_sirialize(command_line, bash_proc, minishell_proc)
         self.log.add(result)
         return result
@@ -105,9 +109,10 @@ class Command:
         result = self.__exec_command_bash_minishell(command_line)
         return result
 
-    def exec_all(self):
+    def all(self):
         results_list = []
-        text_file_path = input('コマンドファイルのパスを入力してください\n指定したファイルが開けない場合、デフォルトファイルが使用されます: ')
+        prompt = 'コマンドファイルのパスを入力してください\n指定したファイルが開けない場合、デフォルトファイルが使用されます: '
+        text_file_path = input(prompt)
         if not os.path.isfile(text_file_path):
             text_file_path = DEFAULT_COMMAND_PATH
         with open(text_file_path, 'r') as f:
