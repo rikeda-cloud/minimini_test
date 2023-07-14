@@ -55,10 +55,7 @@ class PrintResult:
 
     def show(self, results):
         for command, result in results.items():
-            if isinstance(result, dict):
-                self.print_data(command, result, self.accept_default)
-            else:
-                Color.print_reverce(f'{command} {result}', Color.WHITE)
+            self.print_data(command, result, self.accept_default)
 
     def clear(self, result):
         pass

@@ -8,26 +8,31 @@ LOG_DIR = './log/'
 
 def get_format_now_time():
     d = datetime.now()
-    return [d.strftime('%Y_%m_%d_%H_%M_%S'), d.strftime('%Y年%m月%d日%H時%M分%S秒')]
+    return d.strftime('%Y_%m_%d_%H_%M_%S')
 
 
 class Log:
     def __init__(self):
         self.start_time = get_format_now_time()
-        self.log_file = LOG_DIR + 'log_' + self.start_time[0] + '.json'
+        self.log_file = LOG_DIR + 'log_' + self.start_time + '.json'
         if not os.path.isdir(LOG_DIR):
             os.mkdir(LOG_DIR)
         with open(self.log_file, 'w'):
             pass
-        self.__start({'start': self.start_time[1]})
+        self.__json_init()
+        # self.__start({'start': self.start_time[1]})
 
-    def __start(self, result: dict):
+    def __json_init(self):
         with open(self.log_file, 'a') as f:
-            json.dump(result, f, indent=2, ensure_ascii=False)
+            json.dump({}, f, indent=2, ensure_ascii=False)
 
     def add(self, result: dict):
-        with open(self.log_file, 'r') as f:
-            data = json.load(f)
+        try:
+            with open(self.log_file, 'r') as f:
+                data = json.load(f)
+                data.update(result)
+        except json.decoder.JSONDecodeError:
+            data = {}
             data.update(result)
         with open(self.log_file, 'w') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
@@ -41,10 +46,9 @@ class Log:
         json_load = self.load()
         search_result_list = []
         for command, data in json_load.items():
-            if type(data) == dict:
-                for key, value in data.items():
-                    if key == label and value == status:
-                        search_result_list.append({command: data})
+            for key, value in data.items():
+                if key == label and value == status:
+                    search_result_list.append({command: data})
         return search_result_list
 
 

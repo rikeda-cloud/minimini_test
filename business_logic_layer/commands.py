@@ -47,13 +47,12 @@ def anlysis_result(results: dict[str, str]):
             'total_stderr_faild': 0
     }
     for command, result in results.items():
-        if isinstance(result, dict):
-            if result['diff_exit_status'] == 'KO':
-                after_anlysis_result['total_exit_status_faild'] += 1
-            if result['diff_stdout'] == 'KO':
-                after_anlysis_result['total_stdout_faild'] += 1
-            if result['diff_stderr'] == 'KO':
-                after_anlysis_result['total_stderr_faild'] += 1
+        if result['diff_exit_status'] == 'KO':
+            after_anlysis_result['total_exit_status_faild'] += 1
+        if result['diff_stdout'] == 'KO':
+            after_anlysis_result['total_stdout_faild'] += 1
+        if result['diff_stderr'] == 'KO':
+            after_anlysis_result['total_stderr_faild'] += 1
     return after_anlysis_result
 
 
@@ -112,10 +111,10 @@ class Command:
     def all(self):
         results_list = []
         prompt = 'コマンドファイルのパスを入力してください\n指定したファイルが開けない場合、デフォルトファイルが使用されます: '
-        text_file_path = input(prompt)
-        if not os.path.isfile(text_file_path):
-            text_file_path = DEFAULT_COMMAND_PATH
-        with open(text_file_path, 'r') as f:
+        command_file_path = input(prompt)
+        if not os.path.isfile(command_file_path):
+            command_file_path = DEFAULT_COMMAND_PATH
+        with open(command_file_path, 'r') as f:
             for command in f.readlines():
                 command = command.rstrip('\n')
                 result = self.__exec_command_bash_minishell(command)
