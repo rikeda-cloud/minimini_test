@@ -8,7 +8,9 @@ BASH = 'bash'
 BASH_PATH = '/bin/bash'
 MINISHELL = 'minishell'
 MINISHELL_PATH = './minishell'
-DEFAULT_COMMAND_PATH = './default_command.txt'
+DEFAULT_COMMAND_DIR = './command/'
+DEFAULT_COMMAND_PATH = DEFAULT_COMMAND_DIR + 'default_command.cmd'
+EXTENSION = '.cmd'
 
 
 def diff(data1, data2):
@@ -46,7 +48,7 @@ def anlysis_result(results: dict[str, str]):
             'total_stdout_faild': 0,
             'total_stderr_faild': 0
     }
-    for command, result in results.items():
+    for result in results.values():
         if result['diff_exit_status'] == 'KO':
             after_anlysis_result['total_exit_status_faild'] += 1
         if result['diff_stdout'] == 'KO':
@@ -75,6 +77,17 @@ def choice_label_and_status():
     select_status = 'OK' if select_status == 'OK' else 'KO'
     return labels[select_idx - 1], select_status
 
+def input_file_name():
+    while True:
+        file_name = input(f'作成したい{EXTENSION}ファイル名を入力してください: ')
+        if not file_name.endswith(EXTENSION):
+            print(f'ファイルの拡張子は{EXTENSION}のみ使用できます')
+        elif os.path.isfile(file_name):
+            print("そのファイルはすでに存在します")
+        else:
+            break
+    return file_name
+
 
 class Command:
     def __init__(self, minishell_prompt):
@@ -91,16 +104,6 @@ class Command:
         minishell_proc.stdout = minishell_stdout
         result = json_sirialize(command_line, bash_proc, minishell_proc)
         self.log.add(result)
-        return result
-
-    def anlysis(self):
-        results = self.log.load()
-        results = anlysis_result(results)
-        return results
-
-    def search(self):
-        label, status = choice_label_and_status()
-        result = self.log.search(label, status)
         return result
 
     def exec(self):
@@ -124,6 +127,24 @@ class Command:
     def show(self):
         result = self.log.load()
         return result
+
+    def search(self):
+        label, status = choice_label_and_status()
+        result = self.log.search(label, status)
+        return result
+
+    def anlysis(self):
+        results = self.log.load()
+        results = anlysis_result(results)
+        return results
+
+    def create(self):
+        file_name = input_file_name()
+        results = self.log.load()
+        command_list = [command for command in results.keys()]
+        with open(DEFAULT_COMMAND_DIR + file_name, 'w') as f:
+            f.writelines('\n'.join(command_list))
+        return file_name
 
     def clear(self):
         clear = 'cls' if os.name == 'nt' else 'clear'

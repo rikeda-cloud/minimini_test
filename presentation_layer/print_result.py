@@ -36,14 +36,6 @@ class PrintResult:
                 else:
                     Color.print(f'{key} -> {value}', Color.CYAN)
 
-    def anlysis(self, after_anlysis):
-        self.print_data('anlysis', after_anlysis, self.accept_anlysis)
-
-    def search(self, results):
-        for result in results:
-            for command, data in result.items():
-                self.print_data(command, data, self.accept_default)
-
     def exec(self, result):
         for command, data in result.items():
             self.print_data(command, data, self.accept_exec)
@@ -53,9 +45,21 @@ class PrintResult:
             for command, data in result.items():
                 self.print_data(command, data, self.accept_exec)
 
+    def search(self, results):
+        for result in results:
+            for command, data in result.items():
+                self.print_data(command, data, self.accept_default)
+
     def show(self, results):
         for command, result in results.items():
             self.print_data(command, result, self.accept_default)
+
+    def anlysis(self, after_anlysis):
+        self.print_data('anlysis', after_anlysis, self.accept_anlysis)
+
+    def create(self, file):
+        if file:
+            print(f'{file}が作成されました')
 
     def clear(self, result):
         pass

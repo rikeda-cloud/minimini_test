@@ -1,4 +1,5 @@
 from business_logic_layer.commands import Command
+from business_logic_layer.commands import EXTENSION
 from presentation_layer.color import Color
 from presentation_layer.print_result import PrintResult
 
@@ -11,16 +12,6 @@ class Option:
         self.command = Command(minishell_prompt)
         self.print_result = PrintResult()
         self.command_dict = {
-            'anlysis': {
-                'description': 'KO/コマンド数を表示',
-                'method': self.command.anlysis,
-                'print': self.print_result.anlysis
-            },
-            'search': {
-                'description': '特定の実行結果となったコマンドを検索',
-                'method': self.command.search,
-                'print': self.print_result.search
-            },
             'exec': {
                 'description': '入力したコマンドを一つずつ実行',
                 'method': self.command.exec,
@@ -35,6 +26,21 @@ class Option:
                 'description': '全ての実行結果を一覧',
                 'method': self.command.show,
                 'print': self.print_result.show
+            },
+            'search': {
+                'description': '特定の実行結果となったコマンドを検索',
+                'method': self.command.search,
+                'print': self.print_result.search
+            },
+            'anlysis': {
+                'description': 'KO/コマンド数を表示',
+                'method': self.command.anlysis,
+                'print': self.print_result.anlysis
+            },
+            'create': {
+                'description': '実行結果から' + EXTENSION + 'ファイルを作成',
+                'method': self.command.create,
+                'print': self.print_result.create
             },
             'clear': {
                 'description': 'ウィンドウのクリア',
