@@ -1,4 +1,5 @@
 import os
+import time
 import subprocess
 from persistence_layer.log import Log
 from presentation_layer.color import Color
@@ -54,11 +55,14 @@ class Command:
     def all(self):
         results_list = []
         command_file_path = input_exec_command_file_name()
+        start_time = time.perf_counter()
         with open(command_file_path, 'r') as f:
             for command in f.readlines():
                 command = command.rstrip('\n')
                 result = self.__exec_command_bash_minishell(command)
                 results_list.append(result)
+        end_time = time.perf_counter()
+        print(f'Execution time = {end_time - start_time}')
         return results_list
 
     def show(self):
