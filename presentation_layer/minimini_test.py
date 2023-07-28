@@ -1,15 +1,11 @@
-from business_logic_layer.commands import Command
-from business_logic_layer.commands import EXTENSION
 from presentation_layer.color import Color
 from presentation_layer.print_result import PrintResult
-
-
-PROMPT = ' コマンドを選択してください: '
+from business_logic_layer.commands import Command
 
 
 class Option:
-    def __init__(self, minishell_prompt):
-        self.command = Command(minishell_prompt)
+    def __init__(self, setting):
+        self.command = Command(setting)
         self.print_result = PrintResult()
         self.command_dict = {
             'exec': {
@@ -38,7 +34,7 @@ class Option:
                 'print': self.print_result.anlysis
             },
             'create': {
-                'description': '実行結果から' + EXTENSION + 'ファイルを作成',
+                'description': '実行結果から' + setting.extension + 'ファイルを作成',
                 'method': self.command.create,
                 'print': self.print_result.create
             },
@@ -67,7 +63,7 @@ class Option:
         exist_flag = False
         while True:
             self.__print_commands()
-            choice = input(PROMPT).lower().strip()
+            choice = input(' コマンドを選択してください: ').lower().strip()
             exist_flag = self.__check_choice(choice)
             if exist_flag:
                 break
@@ -83,12 +79,3 @@ class Option:
                 break
             result = self.command_dict[choice]['method']()
             self.command_dict[choice]['print'](result)
-
-
-def main():
-    option = Option()
-    option.test_loop()
-
-
-if __name__ == '__main__':
-    main()

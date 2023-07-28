@@ -1,0 +1,12 @@
+{
+	"MINISHELL_PROMPT": "minishell >> ",
+	"DEFAULT_SHELL": "bash",
+	"DEFAULT_SHELL_PATH": "/bin/bash",
+	"MINISHELL": "minishell",
+	"MINISHELL_PATH": "./minishell",
+	"LOG_DIR": "./log/",
+	"LOG_FILE_FORMAT": "%Y_%m_%d_%H_%M_%S",
+	"COMMAND_DIR": "./command/",
+	"DEFAULT_COMMAND_FILE": "./command/default_command.cmd",
+	"EXTENSION": ".cmd"
+}

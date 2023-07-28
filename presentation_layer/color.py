@@ -23,13 +23,3 @@ class Color:
     @classmethod
     def print_reverce(self, string, color, end='\n'):
         print(self.REVERCE + color + string + Color.END, end=end)
-
-
-def main():
-    Color.print('abc', Color.RED, end='')
-    Color.print_underline('abc', Color.RED, end='')
-    Color.print_reverce('abc', Color.RED, end='')
-
-
-if __name__ == '__main__':
-    main()

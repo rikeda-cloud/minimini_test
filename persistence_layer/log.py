@@ -3,24 +3,20 @@ import json
 from datetime import datetime
 
 
-LOG_DIR = './log/'
-
-
-def get_format_now_time():
+def get_format_now_time(file_format):
     d = datetime.now()
-    return d.strftime('%Y_%m_%d_%H_%M_%S')
+    return d.strftime(file_format)
 
 
 class Log:
-    def __init__(self):
-        self.start_time = get_format_now_time()
-        self.log_file = LOG_DIR + 'log_' + self.start_time + '.json'
-        if not os.path.isdir(LOG_DIR):
-            os.mkdir(LOG_DIR)
+    def __init__(self, setting):
+        self.start_time = get_format_now_time(setting.log_file_format)
+        self.log_file = setting.log_dir + 'log_' + self.start_time + '.json'
+        if not os.path.isdir(setting.log_dir):
+            os.mkdir(setting.log_dir)
         with open(self.log_file, 'w'):
             pass
         self.__json_init()
-        # self.__start({'start': self.start_time[1]})
 
     def __json_init(self):
         with open(self.log_file, 'a') as f:
@@ -28,14 +24,18 @@ class Log:
 
     def add(self, result: dict):
         try:
-            with open(self.log_file, 'r') as f:
-                data = json.load(f)
+            with open(self.log_file, 'r+') as f:
+                try:
+                    data = json.load(f)
+                except json.decoder.JSONDecodeError:
+                    data = {}
                 data.update(result)
-        except json.decoder.JSONDecodeError:
-            data = {}
-            data.update(result)
-        with open(self.log_file, 'w') as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+                f.seek(0)
+                json.dump(data, f, indent=2, ensure_ascii=False)
+                f.truncate()
+        except FileNotFoundError:
+            with open(self.log_file, 'w') as f:
+                json.dump(result, f, indent=2, ensure_ascii=False)
 
     def load(self):
         with open(self.log_file, 'r') as f:
@@ -50,15 +50,3 @@ class Log:
                 if key == label and value == status:
                     search_result_list.append({command: data})
         return search_result_list
-
-
-def main():
-    log = Log()
-    log.add({"ls -la": {'bash_status': 'KO', 'minishell_status': 'KO'}})
-    log.add({"echo": {'bash_status': 'OK', 'minishell_status': 'OK'}})
-    print(log.search('bash_status', 'OK'))
-    print(log.search('bash_status', 'KO'))
-
-
-if __name__ == '__main__':
-    main()
