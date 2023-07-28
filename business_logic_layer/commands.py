@@ -1,4 +1,6 @@
+import asyncio
 import os
+import re
 import time
 import subprocess
 from persistence_layer.log import Log
@@ -25,31 +27,30 @@ class Command:
         self.log = Log()
         self.minishell_prompt = minishell_prompt
 
-    def __exec_command_line(self, command_line: str, shell_path: str):
-        proc = subprocess.run(
+    async def __exec_command_line(self, command_line: str, shell_path: str):
+        command_line = command_line.encode()
+        proc = await asyncio.create_subprocess_shell(
                     shell_path,
-                    input=command_line,
-                    encoding='UTF-8',
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE
+                    stdin=asyncio.subprocess.PIPE,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
         )
-        return proc
+        stdout, stderr = await proc.communicate(input=command_line)
+        stdout, stderr = stdout.decode(), stderr.decode()
+        if shell_path == MINISHELL_PATH:
+            stdout = re.sub(r'^.*\n', '', stdout)
+        return stdout, stderr, proc.returncode
 
-    def __exec_command_bash_minishell(self, command_line: str):
-        bash_proc = self.__exec_command_line(command_line, BASH_PATH)
-        minishell_proc = self.__exec_command_line(command_line, MINISHELL_PATH)
-        minishell_stdout = minishell_proc.stdout
-        minishell_stdout = minishell_stdout.strip(self.minishell_prompt)
-        minishell_stdout = minishell_stdout.lstrip(command_line)
-        minishell_stdout = minishell_stdout.lstrip('\n')
-        minishell_proc.stdout = minishell_stdout
-        result = json_sirialize(command_line, bash_proc, minishell_proc)
+    async def __exec_command_bash_minishell(self, command_line: str):
+        tasks = [self.__exec_command_line(command_line, shell) for shell in (BASH_PATH, MINISHELL_PATH)]
+        results = await asyncio.gather(*tasks)
+        result = json_sirialize(command_line, results[0], results[1])
         self.log.add(result)
         return result
 
     def exec(self):
         command_line = input('実行したいコマンドを入力してください: ')
-        result = self.__exec_command_bash_minishell(command_line)
+        result = asyncio.run(self.__exec_command_bash_minishell(command_line))
         return result
 
     def all(self):
@@ -59,7 +60,7 @@ class Command:
         with open(command_file_path, 'r') as f:
             for command in f.readlines():
                 command = command.rstrip('\n')
-                result = self.__exec_command_bash_minishell(command)
+                result = asyncio.run(self.__exec_command_bash_minishell(command))
                 results_list.append(result)
         end_time = time.perf_counter()
         print(f'Execution time = {end_time - start_time}')
