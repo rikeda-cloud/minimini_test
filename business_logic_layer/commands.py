@@ -10,6 +10,7 @@ from business_logic_layer.utils.choice_label_and_status import choice_label_and_
 from business_logic_layer.utils.anlysis_result import anlysis_result
 from business_logic_layer.utils.input_file_name import input_want_to_create_file_name
 from business_logic_layer.utils.input_file_name import input_exec_command_file_name
+from business_logic_layer.utils.print_progress import print_progress
 
 
 class Command:
@@ -44,9 +45,14 @@ class Command:
         command_file_path = input_exec_command_file_name(self.setting)
         start_time = time.perf_counter()
         with open(command_file_path, 'r') as f:
-            result_list = [self.__exec_command_shell(cmd.rstrip('\n')) for cmd in f.readlines()]
+            number_of_command = len(f.readlines())
+        result_list = []
+        with open(command_file_path, 'r') as f:
+            for i, cmd in enumerate(f.readlines()):
+                result_list.append(self.__exec_command_shell(cmd.rstrip('\n')))
+                print_progress(i, number_of_command)
         end_time = time.perf_counter()
-        print(f'Execution time = {end_time - start_time}')
+        print(f'\nExecution time = {end_time - start_time}')
         return result_list
 
     def show(self):
