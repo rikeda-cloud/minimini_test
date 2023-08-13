@@ -5,6 +5,7 @@
 ### を実装している場合、それらで適切に区切ることで複数コマンドを実行することができます。
 ## このテストの使い方
 ### minishell内のrl_event_hookをコメントアウトする
+### minishell終了時のexitメッセージがある場合コメントアウトする
 ### minishell実行ファイルを作成する
 ### minishell実行ファイルをminimini_testディレクトリへ入れる。
 ### minishell内のプロンプトをコピーし、main.pyファイル内のminishell_prompt定数に設定。
