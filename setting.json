@@ -1,4 +1,5 @@
 {
+	"MINISHELL_PROMPT": "minishell >> ",
 	"DEFAULT_SHELL": "bash",
 	"DEFAULT_SHELL_PATH": "/bin/bash",
 	"MINISHELL": "minishell",

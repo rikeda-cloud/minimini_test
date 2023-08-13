@@ -8,6 +8,7 @@ class Setting:
     def __init__(self, setting_file):
         with open(setting_file, 'r') as f:
             data = json.load(f)
+            self.minishell_prompt = data.get('MINISHELL_PROMPT', 'minishell >> ')
             self.default_shell = data.get('DEFAULT_SHELL', 'bash')
             self.default_shell_path = data.get('DEFAULT_SHELL_PATH', '/bin/bash')
             self.minishell = data.get('MINISHELL', 'minishell')

@@ -32,6 +32,8 @@ class Command:
         shell_proc = self.__exec_command(command, self.setting.default_shell)
         minishell_proc = self.__exec_command(command, self.setting.minishell_path)
         minishell_proc.stdout = re.sub(r'^.*\n', '', minishell_proc.stdout)
+        minishell_proc.stdout = re.sub(f'{self.setting.minishell_prompt}\n', '', minishell_proc.stdout)
+        minishell_proc.stdout = re.sub(f'{self.setting.minishell_prompt}', '', minishell_proc.stdout)
         result = json_sirialize(command, shell_proc, minishell_proc, self.setting)
         self.log.add(result)
         return result

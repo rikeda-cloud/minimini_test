@@ -51,3 +51,4 @@ echo -n "" abc
 echo -n "" "" abc
 echo -n '' abc
 echo -n '' '' abc
+echo $"aaa"

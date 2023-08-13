@@ -1,7 +1,6 @@
 mkdir test ; cd test ; echo $PWD
 mkdir test ; cd test ; cd NOT_EXIST_FILE ; echo $PWD
 mkdir test ; cd test ; cd .. ; echo $PWD
-mkdir test ; cd test ; cd ... ; echo $PWD
 mkdir test ; cd test ; cd ../../../../../ ; echo $PWD
 mkdir test ; cd test ; cd ./././././ ; echo $PWD
 mkdir test ; chmod 000 test ; cd test ; echo $PWD
@@ -22,3 +21,8 @@ mkdir test ; cd test ; rm -r ../test ; cd . ; export | grep PWD= ; echo $PWD
 mkdir test ; cd test ; rm -r ../test ; cd NOT_EXIST_FILE ; export | grep PWD= ; echo $PWD
 echo $PWD ; cd ../ ; echo $PWD $OLDPWD ; cd ../ ; echo $PWD $OLDPWD ; echo $PWD
 unset PWD ; cd ../ ; export | grep PWD ; cd ../ ; export | grep PWD
+mkdir "/home/rikeda/TEST" ; mkdir "/home/rikeda/TEST/test" ; export CDPATH="/home/rikeda/TEST" ; mkdir test ; cd test
+unset HOME ; cd
+unset HOME ; export HOME ; cd
+unset HOME ; export HOME= ; cd
+export CDPATH="/home/rikeda" ; cd ""
